@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Input\Input;
 use Tymon\JWTAuth\JWTAuth;
 use App\Model\Users;
 
