@@ -17,14 +17,11 @@ class RequestController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @param $app_id
-     * @param $fb_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function infoApp($app_id, $fb_id)
+    public function infoApp()
     {
-        //
-        return $this->respondSuccess($this->requestService->infoApp($app_id, $fb_id));
+        return $this->respondSuccess($this->requestService->infoApp($_GET));
     }
 
     /**
@@ -38,12 +35,12 @@ class RequestController extends Controller
     }
 
     /**
-     * @param $app_id
+     * @param $params
      * @return \Illuminate\Http\JsonResponse
      */
-    public function infoResult($app_id)
+    public function infoResult()
     {
-        return $this->respondSuccess([]);
+        return $this->respondSuccess($this->requestService->infoResult($_POST));
     }
 
     /**

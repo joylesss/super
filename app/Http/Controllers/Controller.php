@@ -32,6 +32,7 @@ class Controller extends BaseController
         return $this->respond([
             'status'    => true,
             'content'   => $data,
+            'message'   => 'Success'
         ], $statusCode);
     }
 

@@ -34,15 +34,15 @@ Route::middleware('auth')->group(function() {
         Route::post('logout', 'AuthController@logout');
     });
 
-    # Folder Api
-    Route::namespace('Api')->group(function() {
-        Route::get('info_app/{app_id}/{fb_id}', 'RequestController@infoApp');
-        Route::get('info_question/{app_id}', 'RequestController@infoQuestion');
-        Route::get('info_score/{app_id}', 'RequestController@infoScore');
-        Route::get('info_result/{app_id}', 'RequestController@infoResult');
-    });
-});
 
+});
+# Folder Api
+Route::namespace('Api')->group(function() {
+    Route::get('info_app', 'RequestController@infoApp');
+    Route::get('info_question/{app_id}', 'RequestController@infoQuestion');
+    Route::get('info_score/{app_id}', 'RequestController@infoScore');
+    Route::post('info_result', 'RequestController@infoResult');
+});
 
 # Use for all request current
 Route::match(['get', 'post'], '/', function () {
