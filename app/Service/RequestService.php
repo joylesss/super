@@ -22,29 +22,31 @@ class RequestService {
                 ->select('apps.name as app_name',
                     'version_ios',
                     'version_android',
-                    /*'users.id as user_id',*/
-                    /*'scores.id as score_id',*/
                     'apps.prize',
                     'apps.plan_test')
                 ->where('apps.id', '=', $app_id)
                 ->get()->toArray();
         }
-        return DB::table('apps')
-            ->select('apps.name as app_name',
-                'version_ios',
-                'version_android',
-                /*'users.id as user_id',*/
-                /*'scores.id as score_id',*/
-                'apps.prize',
-                'apps.plan_test',
-                'scores.point')
+        $users = DB::table('users')
+            ->select('users.id as user_id', 'scores.id', 'scores.point')
+            ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
+            ->where('users.fb_id', '=', $fb_id)
+            ->get()->toArray()[0];
+
+        $apps = DB::table('apps')
+            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test')
             ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
-            ->leftJoin('users', function($join) use($app_id, $fb_id) {
-                $join->on('scores.user_id', '=', 'users.id')
-                    ->where('users.id', '=', $fb_id);
-            })
             ->where('apps.id', '=', $app_id)
-            ->get()->toArray();
+            ->get()->toArray()[0];
+
+        return [
+            'app_name' => $apps->name,
+            'version_ios' => $apps->version_ios,
+            'version_android' => $apps->version_android,
+            'prize' => $apps->prize,
+            'plan_test' => $apps->plan_test,
+            'point' => $users->point,
+        ];
     }
 
     /**
@@ -91,31 +93,34 @@ class RequestService {
         $fb_id  = $params['fb_id'] ?? '';
         $score  = $params['score'] ?? '';
 
-        $score_id = DB::table('apps')->select('scores.id as score_id')
-            ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
-            ->leftJoin('users', function($join) use($app_id, $fb_id) {
-                $join->on('scores.user_id', '=', 'users.id')
-                    ->where('users.id', '=', $fb_id);
+        $score_id = DB::table('users')->select('scores.id as score_id')
+            ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
+            ->leftJoin('apps', function($join) use($app_id, $fb_id) {
+                $join->on('scores.app_id', '=', 'apps.id')
+                    ->where('apps.id', '=', $app_id);
             })
-            ->where('apps.id', '=', $app_id)
+            ->where('users.fb_id', '=', $fb_id)
             ->get()->toArray()[0]->score_id ?? '';
 
         $user_id = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
-
         if ($score_id) {
             $data           = Scores::findOrFail($score_id);
+            $max_score = $data->point;
+            if ($score > $data->point) {
+                $max_score = $score;
+            }
             $input = [
                 'id'        => $score_id,
                 'user_id'   => $user_id,
                 'app_id'    => $app_id,
-                'point'     => ($score + $data->point),
+                'point'     => $max_score,
             ];
             $data->update($input);
         } else {
             $input = [
-                'user_id' => $user_id,
-                'app_id' => $app_id,
-                'point' => $score,
+                'user_id'   => $user_id,
+                'app_id'    => $app_id,
+                'point'     => $score,
             ];
             Scores::create($input);
         }
