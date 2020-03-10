@@ -8,17 +8,17 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\JWTAuth;
 use App\Model\Users;
+use App\Service\RequestService;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    protected $requestService;
+
+    public function __construct(RequestService $requestService)
     {
 //        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->requestService = $requestService;
     }
 
     /**
@@ -45,6 +45,9 @@ class AuthController extends Controller
             'password'  => 'password',
         ];
         $token = Auth::attempt($credentials);
+
+        return $this->respondSuccess($this->requestService->infoApp($input));
+
         return $this->respondWithToken($token);
     }
 

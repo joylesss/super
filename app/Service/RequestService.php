@@ -18,19 +18,30 @@ class RequestService {
         $app_id = $params['app_id'] ?? '';
         $fb_id  = $params['fb_id'] ?? '';
         if (empty($fb_id)) {
-            return DB::table('apps')
+            $data_app = DB::table('apps')
                 ->select('apps.name as app_name',
                     'version_ios',
                     'version_android',
                     'apps.prize',
                     'apps.plan_test')
                 ->where('apps.id', '=', $app_id)
-                ->get()->toArray()[0];
+                ->get()->toArray();
+            $app = [];
+            if (!empty($data_app)) {
+                $app = $data_app[0];
+            }
+            return [
+                'app_name'          => $app->app_name ?? '',
+                'version_ios'       => $app->version_ios ?? '',
+                'version_android'   => $app->version_android ?? '',
+                'prize'             => $app->prize ?? '',
+                'plan_test'         => $app->plan_test ?? '',
+            ];
         }
 
 
         $user_id    = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
-        $score = DB::table('scores')
+        $score      = DB::table('scores')
             ->select('apps.name as app_name',
                 'version_ios',
                 'version_android',
@@ -60,17 +71,25 @@ class RequestService {
         }
 
 
-        $users = DB::table('users')
+        $data_users = DB::table('users')
             ->select('users.id as user_id', 'scores.id', 'scores.point')
             ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
             ->where('users.fb_id', '=', $fb_id)
-            ->get()->toArray()[0];
+            ->get()->toArray();
+        $user = [];
+        if (!empty($data_users)) {
+            $user = $data_users[0];
+        }
 
-        $apps = DB::table('apps')
+        $data_apps = DB::table('apps')
             ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point')
             ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
             ->where('apps.id', '=', $app_id)
-            ->get()->toArray()[0];
+            ->get()->toArray();
+        $app = [];
+        if (!empty($data_apps)) {
+            $app = $data_apps[0];
+        }
 
         $res_win = DB::table('wins')
             ->select('wins.prize', 'wins.plan_test')
@@ -89,12 +108,12 @@ class RequestService {
         }
 
         return [
-            'app_name'      => $apps->name,
-            'version_ios'   => $apps->version_ios,
-            'version_android' => $apps->version_android,
-            'prize'         => $apps->prize,
-            'plan_test'     => $apps->plan_test,
-            'point'         => $users->point === $apps->point ? $users->point : '',
+            'app_name'      => $app->name ?? '',
+            'version_ios'   => $app->version_ios ?? '',
+            'version_android' => $app->version_android ?? '',
+            'prize'         => $app->prize ?? '',
+            'plan_test'     => $app->plan_test ?? '',
+            'point'         => !empty($user) & !empty($app) ? ($user->point === $app->point ? $user->point : '') : '',
             'win_prize'     => $win->prize ?? '',
             'win_plan_test' => $win->plan_test ?? '',
         ];
