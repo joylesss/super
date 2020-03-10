@@ -25,8 +25,41 @@ class RequestService {
                     'apps.prize',
                     'apps.plan_test')
                 ->where('apps.id', '=', $app_id)
-                ->get()->toArray();
+                ->get()->toArray()[0];
         }
+
+
+        $user_id    = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
+        $score = DB::table('scores')
+            ->select('apps.name as app_name',
+                'version_ios',
+                'version_android',
+                'apps.prize',
+                'apps.plan_test',
+                'scores.point',
+                'wins.prize as win_prize',
+                'wins.plan_test as win_plan_test')
+            ->leftJoin('users', function($join) use($fb_id) {
+                $join->on('scores.user_id', '=', 'users.id')
+                ->where('users.fb_id', '=', $fb_id);
+            })
+            ->leftJoin('apps', function($join) use($app_id) {
+                $join->on('scores.app_id', '=', 'apps.id')
+                    ->where('apps.id', '=', $app_id);
+            })
+            ->leftJoin('wins', function ($join) use ($app_id, $user_id) {
+                $join->on('scores.app_id', '=', 'wins.app_id')->on('scores.user_id', '=', 'wins.user_id')
+                    ->where('wins.app_id', '=', $app_id)
+                    ->where('wins.user_id', '=', $user_id);
+            })
+            ->where('scores.app_id', '=', $app_id)
+            ->where('scores.user_id', '=', $user_id)
+            ->get()->toArray();
+        if (!empty($score)) {
+            return $score[0];
+        }
+
+
         $users = DB::table('users')
             ->select('users.id as user_id', 'scores.id', 'scores.point')
             ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
@@ -34,18 +67,36 @@ class RequestService {
             ->get()->toArray()[0];
 
         $apps = DB::table('apps')
-            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test')
+            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point')
             ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
             ->where('apps.id', '=', $app_id)
             ->get()->toArray()[0];
 
+        $res_win = DB::table('wins')
+            ->select('wins.prize', 'wins.plan_test')
+            ->leftJoin('users', function($join) {
+                $join->on('wins.user_id', '=', 'users.id');
+            })
+            ->leftJoin('apps', function($join) {
+                $join->on('wins.app_id', '=', 'apps.id');
+            })
+            ->where('wins.app_id', '=', $app_id)
+            ->where('wins.app_id', '=', $fb_id)
+            ->get()->toArray();
+        $win = [];
+        if (!empty($res_win)) {
+            $win = $res_win[0];
+        }
+
         return [
-            'app_name' => $apps->name,
-            'version_ios' => $apps->version_ios,
+            'app_name'      => $apps->name,
+            'version_ios'   => $apps->version_ios,
             'version_android' => $apps->version_android,
-            'prize' => $apps->prize,
-            'plan_test' => $apps->plan_test,
-            'point' => $users->point,
+            'prize'         => $apps->prize,
+            'plan_test'     => $apps->plan_test,
+            'point'         => $users->point === $apps->point ? $users->point : '',
+            'win_prize'     => $win->prize ?? '',
+            'win_plan_test' => $win->plan_test ?? '',
         ];
     }
 
@@ -68,17 +119,19 @@ class RequestService {
      */
     public function infoScore($app_id)
     {
-        return DB::table('apps')
-            ->select(
-                'fb_id',
+        return DB::table('scores')
+            ->select('fb_id',
                 'users.name as user_name',
                 'apps.name as user_app',
-                'scores.point'
-            )
-            ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
-            ->leftJoin('users', 'scores.user_id', '=', 'users.id')
-            ->where('apps.id', '=', $app_id)
-            ->get();
+                'scores.point')
+            ->leftJoin('users', function($join) {
+                $join->on('scores.user_id', '=', 'users.id');
+            })
+            ->leftJoin('apps', function($join) {
+                $join->on('scores.app_id', '=', 'apps.id');
+            })
+            ->where('scores.app_id', '=', $app_id)
+            ->orderBy('point', 'asc')->get();
     }
 
     /**
@@ -93,16 +146,26 @@ class RequestService {
         $fb_id  = $params['fb_id'] ?? '';
         $score  = $params['score'] ?? '';
 
-        $score_id = DB::table('users')->select('scores.id as score_id')
-            ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
-            ->leftJoin('apps', function($join) use($app_id, $fb_id) {
+        $user_id    = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
+        $res_core   = DB::table('scores')
+            ->select('scores.id as score_id')
+            ->leftJoin('users', function($join) use($fb_id) {
+                $join->on('scores.user_id', '=', 'users.id')
+                ->where('users.fb_id', '=', $fb_id);
+            })
+            ->leftJoin('apps', function($join) use($app_id) {
                 $join->on('scores.app_id', '=', 'apps.id')
                     ->where('apps.id', '=', $app_id);
             })
-            ->where('users.fb_id', '=', $fb_id)
-            ->get()->toArray()[0]->score_id ?? '';
+            ->where('scores.app_id', '=', $app_id)
+            ->where('scores.user_id', '=', $user_id)
+            ->get()->toArray();
 
-        $user_id = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
+        $score_id = '';
+        if (!empty($res_core)) {
+            $score_id = $res_core[0]->score_id;
+        }
+
         if ($score_id) {
             $data           = Scores::findOrFail($score_id);
             $max_score = $data->point;

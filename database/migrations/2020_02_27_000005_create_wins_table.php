@@ -15,6 +15,8 @@ class CreateWinsTable extends Migration
     {
         Schema::create('wins', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('app_id')->unsigned();
+            $table->foreign('app_id')->references('id')->on('apps')->onDelete('cascade');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('prize')->nullable();

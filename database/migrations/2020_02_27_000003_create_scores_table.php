@@ -15,10 +15,10 @@ class CreateScoresTable extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('app_id')->unsigned();
             $table->foreign('app_id')->references('id')->on('apps')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('point')->nullable();
             $table->integer('play_times')->nullable();
             $table->timestamps();

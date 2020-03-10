@@ -49,7 +49,6 @@ class RequestController extends Controller
      */
     public function infoScore($app_id)
     {
-        //
         return $this->respondSuccess($this->requestService->infoScore($app_id));
     }
 
