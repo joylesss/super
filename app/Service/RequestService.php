@@ -49,7 +49,8 @@ class RequestService {
                 'apps.plan_test',
                 'scores.point',
                 'wins.prize as win_prize',
-                'wins.plan_test as win_plan_test')
+                'wins.plan_test as win_plan_test',
+                'phone')
             ->leftJoin('users', function($join) use($fb_id) {
                 $join->on('scores.user_id', '=', 'users.id')
                 ->where('users.fb_id', '=', $fb_id);
@@ -72,7 +73,7 @@ class RequestService {
 
 
         $data_users = DB::table('users')
-            ->select('users.id as user_id', 'scores.id', 'scores.point')
+            ->select('users.id as user_id', 'scores.id', 'scores.point', 'users.phone')
             ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
             ->where('users.fb_id', '=', $fb_id)
             ->get()->toArray();
@@ -107,6 +108,7 @@ class RequestService {
             $win = $res_win[0];
         }
 
+
         return [
             'app_name'      => $app->name ?? '',
             'version_ios'   => $app->version_ios ?? '',
@@ -116,6 +118,8 @@ class RequestService {
             'point'         => !empty($user) & !empty($app) ? ($user->point === $app->point ? $user->point : '') : '',
             'win_prize'     => $win->prize ?? '',
             'win_plan_test' => $win->plan_test ?? '',
+            'phone' => $user->phone ?? '',
+            'rank' => '',
         ];
     }
 
