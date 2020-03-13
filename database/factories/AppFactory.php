@@ -18,11 +18,5 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(Apps::class, function (Faker $faker) {
-    return [
-        'name'              => $faker->unique()->name,
-        'version_ios'       => $faker->randomNumber(3),
-        'version_android'   => $faker->randomNumber(3),
-        'prize'             => $faker->text('20'),
-        'plan_test'         => $faker->text('50'),
-    ];
+    return [];
 });

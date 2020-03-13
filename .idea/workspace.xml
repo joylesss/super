@@ -2,31 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="964fc185-aef2-43fe-a121-b97cf2bb8d9b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AppController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/RequestController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Service/AppService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Service/RequestService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Service/UserService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/AppFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/QuestionFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/ScoreFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/QuestionsTableSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/ScoresTableSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/super_v5.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/super_v5.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/SignInController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/SignOutController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/RequestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/RequestController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Service/RequestService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Service/RequestService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/AppFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AppFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/factories/UserFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/UserFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/AppsTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/AppsTableSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UserTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/AppsTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,6 +132,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php56" />
       <path value="$PROJECT_DIR$/vendor/tymon/jwt-auth" />
       <path value="$PROJECT_DIR$/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/vendor/pusher/pusher-push-notifications" />
+      <path value="$PROJECT_DIR$/vendor/firebase/php-jwt" />
     </include_path>
   </component>
   <component name="ProjectId" id="1YfWIiRaZYWbw2CqhCrPRIAEkLK" />
@@ -155,7 +146,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Company/jinjer_core_salary" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
@@ -171,18 +162,6 @@
       <recent name="$PROJECT_DIR$/app/Http/Controllers/Api" />
       <recent name="$PROJECT_DIR$/app/Http/Controllers/Auth" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -206,6 +185,8 @@
       <workItem from="1583456536817" duration="4231000" />
       <workItem from="1583461261961" duration="24000" />
       <workItem from="1583466591378" duration="6446000" />
+      <workItem from="1584016883488" duration="8579000" />
+      <workItem from="1584055239442" duration="13226000" />
     </task>
     <servers />
   </component>
@@ -230,13 +211,22 @@
       <screen x="1366" y="0" width="1920" height="1080" />
     </state>
     <state x="2059" y="310" width="524" height="484" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1366.0.1920.1080/0.27.1366.741@1366.0.1920.1080" timestamp="1583423156977" />
-    <state x="2109" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1583339116922">
-      <screen x="1366" y="0" width="1920" height="1080" />
+    <state x="548" y="96" width="865" height="912" key="CommitChangelistDialog2" timestamp="1584077070233">
+      <screen x="51" y="27" width="1869" height="1053" />
+    </state>
+    <state x="548" y="96" width="865" height="912" key="CommitChangelistDialog2/51.27.1869.1053@51.27.1869.1053" timestamp="1584077070233" />
+    <state x="774" y="329" width="424" height="484" key="FileChooserDialogImpl" timestamp="1584064466778">
+      <screen x="51" y="27" width="1869" height="1053" />
     </state>
     <state x="2109" y="310" width="424" height="484" key="FileChooserDialogImpl/1366.0.1920.1080/0.27.1366.741@1366.0.1920.1080" timestamp="1583339116922" />
+    <state x="774" y="329" width="424" height="484" key="FileChooserDialogImpl/51.27.1869.1053@51.27.1869.1053" timestamp="1584064466778" />
     <state x="1815" y="187" key="SettingsEditor" timestamp="1583337913975">
       <screen x="1366" y="0" width="1920" height="1080" />
     </state>
     <state x="1815" y="187" key="SettingsEditor/1366.0.1920.1080/0.27.1366.741@1366.0.1920.1080" timestamp="1583337913975" />
+    <state x="639" y="149" width="683" height="806" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1584025429575">
+      <screen x="51" y="27" width="1869" height="1053" />
+    </state>
+    <state x="639" y="149" width="683" height="806" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/51.27.1869.1053@51.27.1869.1053" timestamp="1584025429575" />
   </component>
 </project>

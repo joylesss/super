@@ -12,6 +12,30 @@ class AppsTableSeeder extends Seeder
     public function run()
     {
         //
-        factory(App\Model\Apps::class, 1000)->create();
+        factory(App\Model\Apps::class)->createMany(
+            [
+                [
+                    'name'              => 'Ai Là Triệu Phú',
+                    'version_ios'       => '1.0.0',
+                    'version_android'   => '1.0.0',
+                    'prize'             => '100000',
+                    'plan_test'         => '[2020/04]',
+                ],
+                [
+                    'name'              => 'Luyện nghe Tiếng Anh',
+                    'version_ios'       => '1.0.0',
+                    'version_android'   => '1.0.0',
+                    'prize'             => '200000',
+                    'plan_test'         => '[2020/06]',
+                ],
+                [
+                    'name'              => 'Nhanh Như Chớt',
+                    'version_ios'       => '1.0.0',
+                    'version_android'   => '1.0.0',
+                    'prize'             => '300000',
+                    'plan_test'         => '[2020/08]',
+                ]
+            ]
+        );
     }
 }

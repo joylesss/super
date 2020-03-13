@@ -15,6 +15,31 @@ class RequestController extends Controller
         $this->requestService = $requestService;
     }
 
+    public function pusher()
+    {
+        $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
+            "instanceId" => "17fc8ca2-b1fd-43d0-83c4-7ea57605d8d6",
+            "secretKey" => "B4CB0171333EF30DA3BAF4480FBBE72B37A06496AD7A0C9648E09FEDEEE0D4F3",
+        ));
+
+        return $beamsClient->publishToInterests(
+            array("debug-test"),
+            array(
+                "fcm" => array(
+                    "notification" => array(
+                        "title" => "Hi!",
+                        "body" => "This is my first Push Notification!"
+                    )
+                ),
+                "apns" => array("aps" => array(
+                    "alert" => array(
+                        "title" => "Hi!",
+                        "body" => "This is my first Push Notification!"
+                    )
+                ))
+            ));
+    }
+
     /**
      * Display a listing of the resource.
      * @return \Illuminate\Http\JsonResponse
@@ -50,6 +75,18 @@ class RequestController extends Controller
     public function infoScore($app_id)
     {
         return $this->respondSuccess($this->requestService->infoScore($app_id));
+    }
+
+    /**
+     * @param $app_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function infoPhone()
+    {
+        $response = $this->requestService->infoPhone($_POST);
+        return $response['status'] === true
+            ? $this->respondSuccess([])
+            : $this->respondError($response['message']);
     }
 
     /**
@@ -124,4 +161,6 @@ class RequestController extends Controller
     {
         //
     }
+
+
 }

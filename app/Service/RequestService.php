@@ -17,6 +17,8 @@ class RequestService {
     {
         $app_id = $params['app_id'] ?? '';
         $fb_id  = $params['fb_id'] ?? '';
+
+        # Case 1.
         if (empty($fb_id)) {
             $data_app = DB::table('apps')
                 ->select('apps.name as app_name',
@@ -41,8 +43,32 @@ class RequestService {
 
 
         $user_id    = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
-        $score      = DB::table('scores')
-            ->select('apps.name as app_name',
+        $data_ranks = DB::table('users')
+            ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
+            ->select('users.id', 'users.name', 'scores.point', 'scores.user_id')
+            ->where('scores.app_id', '=', $app_id)
+            ->orderBy('point', 'desc')
+            ->orderBy('users.created_at', 'asc')
+            ->get()->toArray();
+        $ranks = [];
+        if (!empty($data_ranks)) {
+            $data_ranks = (json_decode(json_encode($data_ranks), true));
+            foreach ($data_ranks as $k => $item) {
+                $ranks[$item['id']] = [
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                    'point' => $item['point'],
+                    'user_id' => $item['user_id'],
+                ];
+            }
+        }
+        $ranks = array_values($ranks);
+
+        # Case 2: Full
+        $data_score = DB::table('scores')
+            ->select(
+                'users.id as user_id',
+                'apps.name as app_name',
                 'version_ios',
                 'version_android',
                 'apps.prize',
@@ -66,14 +92,22 @@ class RequestService {
             })
             ->where('scores.app_id', '=', $app_id)
             ->where('scores.user_id', '=', $user_id)
+            ->orderBy('scores.point', 'desc')
             ->get()->toArray();
-        if (!empty($score)) {
-            return $score[0];
+        if (!empty($data_score)) {
+            $score = json_decode(json_encode($data_score[0]), true);
+            foreach ($ranks as $key => $item) {
+                if ($item['id'] === $score['user_id']) {
+                    $score['rank'] = $key+1;
+                }
+            }
+            unset($score['user_id']);
+            return $score;
         }
 
-
+        # Case 3: Create new user not has score point
         $data_users = DB::table('users')
-            ->select('users.id as user_id', 'scores.id', 'scores.point', 'users.phone')
+            ->select('users.id as user_id', 'scores.id as score_id', 'scores.point', 'users.phone')
             ->leftJoin('scores', 'users.id', '=', 'scores.user_id')
             ->where('users.fb_id', '=', $fb_id)
             ->get()->toArray();
@@ -107,8 +141,6 @@ class RequestService {
         if (!empty($res_win)) {
             $win = $res_win[0];
         }
-
-
         return [
             'app_name'      => $app->name ?? '',
             'version_ios'   => $app->version_ios ?? '',
@@ -118,8 +150,8 @@ class RequestService {
             'point'         => !empty($user) & !empty($app) ? ($user->point === $app->point ? $user->point : '') : '',
             'win_prize'     => $win->prize ?? '',
             'win_plan_test' => $win->plan_test ?? '',
-            'phone' => $user->phone ?? '',
-            'rank' => '',
+            'phone'         => $user->phone ?? '',
+            'rank'          => 0,
         ];
     }
 
@@ -209,6 +241,26 @@ class RequestService {
                 'point'     => $score,
             ];
             Scores::create($input);
+        }
+    }
+
+    public function infoPhone($params) {
+        $fb_id = $params['fb_id'] ?? '';
+        $phone = $params['phone'] ?? '';
+
+        # Check FB Id
+        $user_id    = DB::table('users')->select('users.id')->where('users.fb_id', '=', $fb_id)->get()->toArray()[0]->id ?? '';
+        if (empty($user_id)) {
+            return [
+                'status' => false,
+                'message' => 'FB Id information does not exist!'
+            ];
+        }
+
+        if (!empty($phone)) {
+            return [
+                'status' => Users::findOrFail($user_id)->update(['phone' => $phone])
+            ];
         }
     }
 
