@@ -132,7 +132,7 @@ class RequestService {
         }
 
         $data_apps = DB::table('apps')
-            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point', 'app.plan_show_win')
+            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point', 'apps.plan_show_win')
             ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
             ->where('apps.id', '=', $app_id)
             ->get()->toArray();
