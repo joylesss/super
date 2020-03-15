@@ -167,7 +167,7 @@ class RequestService {
             'win_plan_test' => $win->plan_test ?? '',
             'phone'         => $user->phone ?? '',
             'rank'          => 0,
-            'plan_show_win' => $app->plan_show_win,
+            'plan_show_win' => $app->plan_show_win ?? '',
         ];
     }
 
