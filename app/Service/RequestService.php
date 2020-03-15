@@ -25,7 +25,8 @@ class RequestService {
                     'version_ios',
                     'version_android',
                     'apps.prize',
-                    'apps.plan_test')
+                    'apps.plan_test',
+                    'apps.plan_show_win')
                 ->where('apps.id', '=', $app_id)
                 ->get()->toArray();
             $app = [];
@@ -38,6 +39,7 @@ class RequestService {
                 'version_android'   => $app->version_android ?? '',
                 'prize'             => $app->prize ?? '',
                 'plan_test'         => $app->plan_test ?? '',
+                'plan_show_win'     => $app->plan_show_win ?? '',
             ];
         }
 
@@ -76,7 +78,8 @@ class RequestService {
                 'scores.point',
                 'wins.prize as win_prize',
                 'wins.plan_test as win_plan_test',
-                'phone')
+                'phone',
+                'plan_show_win')
             ->leftJoin('users', function($join) use($fb_id) {
                 $join->on('scores.user_id', '=', 'users.id')
                 ->where('users.fb_id', '=', $fb_id);
@@ -108,11 +111,12 @@ class RequestService {
                 'version_android' => $score['version_android'] ?? '',
                 'prize' => $score['prize'] ?? '',
                 'plan_test' => $score['plan_test'] ?? '',
-                'point' => $score['point'] ?? '',
+                'point' => $score['point'] ?? 0,
                 'win_prize' => $score['win_prize'] ?? '',
                 'win_plan_test' => $score['win_plan_test'] ?? '',
                 'phone' => $score['phone'] ?? '',
                 'rank' => $score['rank'] ?? 0,
+                'plan_show_win' => $score['plan_show_win'] ?? '',
             ];
         }
 
@@ -128,7 +132,7 @@ class RequestService {
         }
 
         $data_apps = DB::table('apps')
-            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point')
+            ->select('apps.name', 'version_ios', 'version_android', 'apps.prize', 'apps.plan_test', 'scores.point', 'app.plan_show_win')
             ->leftJoin('scores', 'apps.id', '=', 'scores.app_id')
             ->where('apps.id', '=', $app_id)
             ->get()->toArray();
@@ -158,11 +162,12 @@ class RequestService {
             'version_android' => $app->version_android ?? '',
             'prize'         => $app->prize ?? '',
             'plan_test'     => $app->plan_test ?? '',
-            'point'         => !empty($user) & !empty($app) ? ($user->point === $app->point ? $user->point : '') : '',
+            'point'         => !empty($user) & !empty($app) ? ($user->point === $app->point ? $user->point ?? 0 : 0) : 0,
             'win_prize'     => $win->prize ?? '',
             'win_plan_test' => $win->plan_test ?? '',
             'phone'         => $user->phone ?? '',
             'rank'          => 0,
+            'plan_show_win' => $app->plan_show_win,
         ];
     }
 
