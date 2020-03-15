@@ -32,11 +32,11 @@ class UsersTableSeeder extends Seeder
                 'fb_url'    => '',
             ],
             [
-                'name'      => 'Name 001',#$faker->name,
+                'name'      => 'Phan Quoc Thanh',#$faker->name,
                 'phone'     => '',
                 'password'  => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'role'      => 0,
-                'fb_id'     => '200000686899395',
+                'role'      => 1,
+                'fb_id'     => '2930164663711173',
                 'fb_email'  => '',#$faker->unique()->safeEmail,
                 'fb_url'    => '',
             ],

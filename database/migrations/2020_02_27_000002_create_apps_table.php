@@ -20,6 +20,7 @@ class CreateAppsTable extends Migration
             $table->string('version_android')->nullable();
             $table->string('prize')->nullable();
             $table->string('plan_test')->nullable();
+            $table->string('plan_show_win')->nullable();
             $table->timestamps();
         });
     }

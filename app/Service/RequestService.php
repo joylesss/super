@@ -102,7 +102,18 @@ class RequestService {
                 }
             }
             unset($score['user_id']);
-            return $score;
+            return [
+                'app_name' => $score['app_name'] ?? '',
+                'version_ios' => $score['version_ios'] ?? '',
+                'version_android' => $score['version_android'] ?? '',
+                'prize' => $score['prize'] ?? '',
+                'plan_test' => $score['plan_test'] ?? '',
+                'point' => $score['point'] ?? '',
+                'win_prize' => $score['win_prize'] ?? '',
+                'win_plan_test' => $score['win_plan_test'] ?? '',
+                'phone' => $score['phone'] ?? '',
+                'rank' => $score['rank'] ?? 0,
+            ];
         }
 
         # Case 3: Create new user not has score point

@@ -19,7 +19,7 @@ class CreateScoresTable extends Migration
             $table->foreign('app_id')->references('id')->on('apps')->onDelete('cascade');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('point')->nullable();
+            $table->bigInteger('point')->nullable();
             $table->integer('play_times')->nullable();
             $table->timestamps();
         });
