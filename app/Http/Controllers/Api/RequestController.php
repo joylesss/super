@@ -20,10 +20,13 @@ class RequestController extends Controller
         $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
             "instanceId" => "17fc8ca2-b1fd-43d0-83c4-7ea57605d8d6",
             "secretKey" => "B4CB0171333EF30DA3BAF4480FBBE72B37A06496AD7A0C9648E09FEDEEE0D4F3",
+            /*"instanceId" => "6d56b9b9-2f29-49a8-bc43-6e8bf400cae6",
+            "secretKey" => "F948DAB7DC13143E6AD1E5778AD4C95FC5C97C3C355C534BE74F8FA68AC5512D",*/
         ));
 
         return $beamsClient->publishToInterests(
             array("debug-test"),
+//            array("2930164663711173"),
             array(
                 "fcm" => array(
                     "notification" => array(

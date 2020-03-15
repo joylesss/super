@@ -186,7 +186,7 @@ class RequestService {
                 $join->on('scores.app_id', '=', 'apps.id');
             })
             ->where('scores.app_id', '=', $app_id)
-            ->orderBy('point', 'asc')->get();
+            ->orderBy('point', 'desc')->get();
     }
 
     /**
